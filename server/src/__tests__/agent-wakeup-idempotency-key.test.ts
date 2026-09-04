@@ -254,8 +254,8 @@ describeEmbeddedPostgres("agent wakeup idempotency keys", () => {
   it("leaves a collapsed duplicate's run claimable after the migration", async () => {
     await seedCompanyAndAgent();
     const idempotencyKey = `wake-idempotency-migration:${randomUUID()}`;
-    const survivorId = randomUUID();
-    const duplicateId = randomUUID();
+    const survivorId = "00000000-0000-4000-8000-000000000002";
+    const duplicateId = "00000000-0000-4000-8000-000000000001";
 
     // Recreate the pre-migration state: the index does not exist yet, so two
     // wakes can hold the same key, each with its own queued run.
@@ -263,6 +263,7 @@ describeEmbeddedPostgres("agent wakeup idempotency keys", () => {
     await db.insert(agentWakeupRequests).values([
       {
         id: survivorId,
+        requestedAt: new Date("2026-07-28T00:00:00.000Z"),
         companyId,
         agentId,
         source: "automation",
@@ -274,6 +275,7 @@ describeEmbeddedPostgres("agent wakeup idempotency keys", () => {
       },
       {
         id: duplicateId,
+        requestedAt: new Date("2026-07-28T00:00:01.000Z"),
         companyId,
         agentId,
         source: "automation",
