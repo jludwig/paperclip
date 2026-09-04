@@ -20962,6 +20962,7 @@ export function heartbeatService(
             await environmentsSvc.ensureKubernetesEnvironment(
               agent.companyId,
               bootstrap.kubernetesConfig,
+              { applyOverOperatorEdits: bootstrap.applyOverOperatorEdits },
             );
             kubernetesEnvironment =
               await environmentsSvc.findKubernetesEnvironment(agent.companyId);
